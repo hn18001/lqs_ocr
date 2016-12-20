@@ -4,8 +4,10 @@ import time
 
 sys.path.append("./gen-py")
 from lqs_ocr import ocr_server
+from lqs_ocr import result_server
 from lqs_ocr.ttypes import *
 
+from thrift.protocol.TMultiplexedProtocol import TMultiplexedProtocol
 from thrift.transport import TSocket
 from thrift.transport import TTransport
 from thrift.protocol import TBinaryProtocol
@@ -24,8 +26,12 @@ def main():
     # Wrap in protocol
     protocol = TBinaryProtocol.TBinaryProtocol(transport)
 
+    ocr_protocol = TMultiplexedProtocol(protocol, "ocr_server")
+    result_protocol = TMultiplexedProtocol(protocol, "result_server")
+
     # Create a client to use the protocol encoder
-    client = ocr_server.Client(protocol)
+    ocr_client = ocr_server.Client(ocr_protocol)
+    result_client = result_server.Client(result_protocol)
 
     # Connect!
     transport.open()
@@ -33,10 +39,15 @@ def main():
     while(1):
         start = time.time()
         # Call the interface to scene OCR.
-        results = client.line_ocr()
+        images = ocr_client.line_ocr()
 
-        for result in results:
-            print result.img_name
+        ocr_results = []
+        for image in images:
+            print image.img_name
+            rlt = ocr_result(img_name= image.img_name, result = "hello world")
+            ocr_results.append(rlt)
+
+        result_client.write_ocr_result(ocr_results)
 
         print("ocr's time:%f" %(time.time()-start))
 

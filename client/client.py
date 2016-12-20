@@ -29,14 +29,17 @@ def main():
     # Connect!
     transport.open()
 
-    start = time.time()
-    # Call the interface to scene OCR.
-    results = client.scene_ocr(images, False)
+    while(1):
+        start = time.time()
+        # Call the interface to scene OCR.
+        results = client.scene_ocr(images, False)
 
-    for result in results:
-        print result.result
+        for result in results:
+            print result.result
 
-    print("ocr's time:%f" %(time.time()-start))
+        print("ocr's time:%f" %(time.time()-start))
+
+        time.sleep(2)
 
 if __name__ == "__main__":
     main()

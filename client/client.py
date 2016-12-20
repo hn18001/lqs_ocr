@@ -33,23 +33,26 @@ def main():
     ocr_client = ocr_server.Client(ocr_protocol)
     result_client = result_server.Client(result_protocol)
 
-    # Connect!
-    transport.open()
-
     while(1):
         start = time.time()
-        # Call the interface to scene OCR.
-        images = ocr_client.line_ocr()
+        try:
+            transport.open()
 
-        ocr_results = []
-        for image in images:
-            print image.img_name
-            rlt = ocr_result(img_name= image.img_name, result = "hello world")
-            ocr_results.append(rlt)
+            images = ocr_client.line_ocr()
 
-        result_client.write_ocr_result(ocr_results)
+            ocr_results = []
+            for image in images:
+                print image.img_name
+                rlt = ocr_result(img_name= image.img_name, result = "hello world")
+                ocr_results.append(rlt)
 
-        print("ocr's time:%f" %(time.time()-start))
+            result_client.write_ocr_result(ocr_results)
+
+            transport.close()
+            print("ocr's time:%f" %(time.time()-start))
+        except Exception:
+        #except thrift.TTransportException, tx:
+            print("Failed to connect to %s:%d", addr, port)
 
         time.sleep(2)
 

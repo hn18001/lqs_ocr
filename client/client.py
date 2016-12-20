@@ -13,6 +13,7 @@ from thrift.server import TServer
 
 def main():
     addr = "112.74.23.141"
+    #addr = "10.169.95.133"
     port = 6000
     print("Linking to: %s:%s" %(addr, port))
     transport = TSocket.TSocket(addr, port)
@@ -32,10 +33,10 @@ def main():
     while(1):
         start = time.time()
         # Call the interface to scene OCR.
-        results = client.scene_ocr(images, False)
+        results = client.line_ocr()
 
         for result in results:
-            print result.result
+            print result.img_name
 
         print("ocr's time:%f" %(time.time()-start))
 

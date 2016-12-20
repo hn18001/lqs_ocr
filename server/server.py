@@ -29,15 +29,20 @@ def get_local_ip(ifname):
     return ip
 
 class Handler:
-    def line_ocr():
+    def __init__(self):
+        self.log = {}
+
+    def line_ocr(self):
+        print("Entering line_ocr()")
         img_path = "../need_to_process_images/"
         ocr_imgs = []
         for root, dir_names, file_names in os.walk(img_path):
             for file_name in file_names:
                 full_path = os.path.join(root, file_name)
-                f = open(full_path, full_path)
+                print full_path
+                f = open(full_path, 'r')
                 img = f.read()
-                rlt_img = ocr_img(img = img, img_name = full_name, b_location = False) 
+                rlt_img = ocr_img(img = img, img_name = full_path, b_location = False)
                 ocr_imgs.append(rlt_img)
                 f.close()
         return ocr_imgs
@@ -46,7 +51,7 @@ def main():
 	handler = Handler()
 	processor = ocr_server.Processor(handler)
 
-	addr = get_local_ip("etho")
+	addr = "112.74.23.141" 
 	port = 6000
 	print("Server IP: %s, port: %d" %(addr, port))
 

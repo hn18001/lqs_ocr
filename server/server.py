@@ -3,8 +3,10 @@ import sys
 
 sys.path.append("./gen-py")
 from lqs_ocr import ocr_server
+from lqs_ocr import result_server
 from lqs_ocr.ttypes import *
 
+from thrift.TMultiplexedProcessor import TMultiplexedProcessor
 from thrift.transport import TSocket
 from thrift.transport import TTransport
 from thrift.protocol import TBinaryProtocol
@@ -47,9 +49,25 @@ class Handler:
                 f.close()
         return ocr_imgs
 
+class Handler1:
+    def __init__(self):
+        self.log = {}
+
+    def write_ocr_result(results):
+        for result in result:
+            print result.img_name, result.result
+
 def main():
+	#handler = Handler()
+	#processor = ocr_server.Processor(handler)
 	handler = Handler()
-	processor = ocr_server.Processor(handler)
+	handler1 = Handler1()
+
+	ocr_processor = ocr_server.Processor(handler)
+	result_processor = result_server.Processor(handler1)
+	processor = TMultiplexedProcessor()
+	processor.registerProcessor("ocr_server", ocr_processor)
+	processor.registerProcessor("result_server", result_processor)
 
 	addr = "112.74.23.141" 
 	port = 6000

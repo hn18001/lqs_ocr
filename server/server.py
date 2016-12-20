@@ -53,9 +53,11 @@ class Handler1:
     def __init__(self):
         self.log = {}
 
-    def write_ocr_result(results):
-        for result in result:
-            print result.img_name, result.result
+    def write_ocr_result(self, results):
+        print "In write_ocr_result()"
+	for result in results:
+		print result.img_name, result.result
+	return True
 
 def main():
 	#handler = Handler()

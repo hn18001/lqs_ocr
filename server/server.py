@@ -1,5 +1,6 @@
 import os
 import sys
+import shutil
 
 sys.path.append("./gen-py")
 from lqs_ocr import ocr_server
@@ -36,12 +37,12 @@ class Handler:
 
     def line_ocr(self):
         print("Entering line_ocr()")
-        img_path = "../need_to_process_images/"
+        img_path = "../image_library/"
         ocr_imgs = []
         for root, dir_names, file_names in os.walk(img_path):
             for file_name in file_names:
                 full_path = os.path.join(root, file_name)
-                print full_path
+                #print full_path
                 f = open(full_path, 'r')
                 img = f.read()
                 rlt_img = ocr_img(img = img, img_name = full_path, b_location = False)
@@ -56,7 +57,17 @@ class Handler1:
     def write_ocr_result(self, results):
         print "In write_ocr_result()"
 	for result in results:
-		print result.img_name, result.result
+		img_file_name = result.img_name[result.img_name.rfind('/')+1:]
+		print img_file_name, result.result
+		
+		new_file_txt = new_path + '/%s.txt' % img_file_name;
+		new_img_path = new_path + '/%s' % img_file_name;
+		shutil.move(result.img_name, new_img_path)
+		with open(new_file_path, 'wb') as nfp:
+			line = '%s\n' % result.result;
+			nfp.write(line);
+		
+		
 	return True
 
 def main():
@@ -71,8 +82,8 @@ def main():
 	processor.registerProcessor("ocr_server", ocr_processor)
 	processor.registerProcessor("result_server", result_processor)
 
-	addr = "112.74.23.141" 
-	port = 6000
+	addr = "127.0.0.1" 
+	port = 100
 	print("Server IP: %s, port: %d" %(addr, port))
 
 	transport = TSocket.TServerSocket(addr, port=port)
@@ -85,4 +96,8 @@ def main():
 	server.serve()
 
 if __name__ == "__main__":
+	new_path = '../img_name'
+	if not os.path.exists(new_path):
+		os.mkdir(new_path)
+	
 	main()

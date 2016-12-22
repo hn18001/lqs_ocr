@@ -36,13 +36,11 @@ class Handler:
         self.log = {}
 
     def line_ocr(self):
-        print("Entering line_ocr()")
         img_path = "../need_to_process_images/"
         ocr_imgs = []
         for root, dir_names, file_names in os.walk(img_path):
             for file_name in file_names:
                 full_path = os.path.join(root, file_name)
-                #print full_path
                 f = open(full_path, 'r')
                 img = f.read()
                 rlt_img = ocr_img(img = img, img_name = full_path, b_location = False)
@@ -55,7 +53,6 @@ class Handler1:
         self.log = {}
 
     def write_ocr_result(self, results):
-        print "In write_ocr_result()"
 	for result in results:
 		img_file_name = result.img_name[result.img_name.rfind('/')+1:]
 		print img_file_name, result.result

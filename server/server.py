@@ -48,7 +48,7 @@ class Handler:
                 rlt_img = ocr_img(img = img, img_name = full_path, b_location = False)
                 ocr_imgs.append(rlt_img)
                 f.close()
-        return ocr_imgs
+	return ocr_imgs
 
 class Handler1:
     def __init__(self):

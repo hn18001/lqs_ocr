@@ -1,6 +1,8 @@
 import sys
 import os
 import time
+sys.path.append('/usr/lib/python2.7/dist-packages/')
+import cv2
 
 sys.path.append("./gen-py")
 from lqs_ocr import ocr_server
@@ -15,6 +17,8 @@ from thrift.server import TServer
 
 sys.path.append("./ocr")
 import ocr
+
+import util
 
 def save_img(images):
     path = "../result/"
@@ -32,6 +36,9 @@ def save_img(images):
         f = open(full_path, 'w')
         f.write(image.img)
         f.close()
+
+        util.rotate_img(full_path)
+        util.add_border(full_path)
 
     return img_list
 

@@ -37,7 +37,7 @@ class Handler:
 
     def line_ocr(self):
         print("Entering line_ocr()")
-        img_path = "../image_library/"
+        img_path = "../img_library/"
         ocr_imgs = []
         for root, dir_names, file_names in os.walk(img_path):
             for file_name in file_names:
@@ -62,10 +62,10 @@ class Handler1:
 		
 		new_file_txt = new_path + '/%s.txt' % img_file_name;
 		new_img_path = new_path + '/%s' % img_file_name;
-		shutil.move(result.img_name, new_img_path)
-		with open(new_file_path, 'wb') as nfp:
+		with open(new_file_txt, 'wb') as nfp:
 			line = '%s\n' % result.result;
 			nfp.write(line);
+		shutil.move(result.img_name, new_img_path)
 		
 		
 	return True

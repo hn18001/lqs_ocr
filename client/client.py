@@ -14,9 +14,8 @@ from thrift.protocol import TBinaryProtocol
 from thrift.server import TServer
 
 def main():
-    addr = "127.0.0.1"
-    #addr = "10.169.95.133"
-    port = 100
+    addr = "112.74.23.141"
+    port = 6000
     print("Linking to: %s:%s" %(addr, port))
     transport = TSocket.TSocket(addr, port)
 

@@ -37,7 +37,7 @@ class Handler:
 
     def line_ocr(self):
         print("Entering line_ocr()")
-        img_path = "../img_library/"
+        img_path = "../need_to_process_images/"
         ocr_imgs = []
         for root, dir_names, file_names in os.walk(img_path):
             for file_name in file_names:
@@ -82,8 +82,8 @@ def main():
 	processor.registerProcessor("ocr_server", ocr_processor)
 	processor.registerProcessor("result_server", result_processor)
 
-	addr = "127.0.0.1" 
-	port = 100
+	addr = "112.74.23.141" 
+	port = 6000
 	print("Server IP: %s, port: %d" %(addr, port))
 
 	transport = TSocket.TServerSocket(addr, port=port)
@@ -96,7 +96,7 @@ def main():
 	server.serve()
 
 if __name__ == "__main__":
-	new_path = '../img_name'
+	new_path = '../processed_images'
 	if not os.path.exists(new_path):
 		os.mkdir(new_path)
 	

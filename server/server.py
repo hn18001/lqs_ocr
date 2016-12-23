@@ -36,7 +36,10 @@ class Handler:
         self.log = {}
 
     def line_ocr(self):
-        img_path = "../need_to_process_images/"
+        img_path = "../need_to_process_images/"      # The images that are needed to ocr are saved in the dir.
+        if not os.path.exists(img_path):
+            print("The path [%s] is not exist!" %img_path)
+            return []
         ocr_imgs = []
         for root, dir_names, file_names in os.walk(img_path):
             for file_name in file_names:
@@ -64,7 +67,6 @@ class Handler1:
 			line = '%s\n' % result.result;
 			nfp.write(line);
 		shutil.move(result.img_name, new_img_path)
-		
 		
 	return True
 
@@ -94,7 +96,7 @@ def main():
 	server.serve()
 
 if __name__ == "__main__":
-	new_path = '../processed_images'
+	new_path = '../processed_images'        # Save the ocr result and copy the images to this dir.
 	if not os.path.exists(new_path):
 		os.mkdir(new_path)
 	

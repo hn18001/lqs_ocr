@@ -46,6 +46,7 @@ class Handler:
         for root, dir_names, file_names in os.walk(img_path):
             for file_name in file_names:
                 full_path = os.path.join(root, file_name)
+		print full_path
                 f = open(full_path, 'r')
                 img = f.read()
                 rlt_img = ocr_img(img = img, img_name = full_path, b_location = False)
@@ -64,8 +65,7 @@ class Handler1:
 		get_line_complex_lection.get_row_lection(src_path)
 	for result in results:
 		img_file_name = result.img_name[result.img_name.rfind('/')+1:]
-		#print img_file_name, result.result
-		#print img_file_name
+		print img_file_name, result.result
 		
 		new_file_txt = new_path + '/%s.txt' % img_file_name;
 		new_img_path = new_path + '/%s' % img_file_name;
@@ -88,7 +88,7 @@ def main():
 	processor.registerProcessor("ocr_server", ocr_processor)
 	processor.registerProcessor("result_server", result_processor)
 
-	addr = "127.0.0.1" 
+	addr = "112.74.23.141" 
 	port = 6000
 	print("Server IP: %s, port: %d" %(addr, port))
 

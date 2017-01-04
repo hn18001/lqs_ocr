@@ -42,6 +42,10 @@ class Handler:
         if not os.path.exists(img_path):
             print("The path [%s] is not exist!" %img_path)
             return []
+    	flag = True
+	if flag == True:
+		#src_path = results[0].img_name[:results[0].img_name.rfind('/')]
+		get_line_complex_lection.get_row_lection(img_path)
         ocr_imgs = []
         for root, dir_names, file_names in os.walk(img_path):
             for file_name in file_names:
@@ -59,10 +63,6 @@ class Handler1:
         self.log = {}
 
     def write_ocr_result(self, results):
-    	flag = True
-	if flag == True:
-		src_path = results[0].img_name[:results[0].img_name.rfind('/')]
-		get_line_complex_lection.get_row_lection(src_path)
 	for result in results:
 		img_file_name = result.img_name[result.img_name.rfind('/')+1:]
 		print img_file_name, result.result

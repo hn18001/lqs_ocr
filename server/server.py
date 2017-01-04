@@ -1,6 +1,8 @@
 import os
 import sys
 import shutil
+import get_line_complex_lection
+import cv2
 
 sys.path.append("./gen-py")
 from lqs_ocr import ocr_server
@@ -44,7 +46,7 @@ class Handler:
         for root, dir_names, file_names in os.walk(img_path):
             for file_name in file_names:
                 full_path = os.path.join(root, file_name)
-                print full_path
+		print full_path
                 f = open(full_path, 'r')
                 img = f.read()
                 rlt_img = ocr_img(img = img, img_name = full_path, b_location = False)
@@ -57,6 +59,10 @@ class Handler1:
         self.log = {}
 
     def write_ocr_result(self, results):
+    	flag = True
+	if flag == True:
+		src_path = results[0].img_name[:results[0].img_name.rfind('/')]
+		get_line_complex_lection.get_row_lection(src_path)
 	for result in results:
 		img_file_name = result.img_name[result.img_name.rfind('/')+1:]
 		print img_file_name, result.result

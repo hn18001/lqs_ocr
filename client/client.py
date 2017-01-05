@@ -2,7 +2,7 @@ import sys
 import os
 import time
 sys.path.append('/usr/lib/python2.7/dist-packages/')
-import cv2
+
 
 sys.path.append("./gen-py")
 from lqs_ocr import ocr_server
@@ -32,14 +32,13 @@ def save_img(images):
         result["img_name"] = img_name
         img_list.append(result)
 
-        print full_path
+        print "full path:", full_path
         f = open(full_path, 'w')
         f.write(image.img)
         f.close()
 
         util.rotate_img(full_path)
         util.add_border(full_path)
-
     return img_list
 
 def main():
@@ -73,7 +72,7 @@ def main():
             ocr_results = []
             for img in img_list:
                 ocr_rlt = ocr.ocr(img["full_path"])
-                print ocr_rlt
+		print ocr_rlt
 
                 rlt = ocr_result(img_name = img["img_name"], result = ocr_rlt)
                 ocr_results.append(rlt)

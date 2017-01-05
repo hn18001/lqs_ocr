@@ -11,7 +11,7 @@ import numpy as np
 
 def get_row_lection(src_path):
 	img_list = []
-	base_path = '../processed_images/'
+	base_path = '../need_to_process_images/'
 	cropped_path = '../crop_images/'
 	if not os.path.exists(cropped_path):
 		os.mkdir(cropped_path)
@@ -28,16 +28,20 @@ def get_row_lection(src_path):
 		# step 1
 		src_image, threshold_image = get_threshold_image(new_file, img_path)
 		# step 2
-		threshold_image = denoise(new_file, threshold_image)
+		#threshold_image = denoise(new_file, threshold_image)
 		# step 3
-		crop_src_image, crop_threshold_image = get_lection_position(src_image, threshold_image)
+		#crop_src_image, crop_threshold_image = get_lection_position(src_image, threshold_image)
 		# step 4
-		middle_point_sum = remove_interfere(crop_threshold_image)
+		#middle_point_sum = remove_interfere(threshold_image)
+		middle_point_sum = 0
 		# step 5
-		dilate_image = get_dilate_image(new_file, crop_threshold_image, middle_point_sum)
+		dilate_image = get_dilate_image(new_file, threshold_image, middle_point_sum)
 		# step 6
-		crop_src_image = get_retangle_contours(img_name, new_file, crop_src_image, dilate_image)
+		print("point2")
+		crop_src_image = get_retangle_contours(img_name, new_file, threshold_image, dilate_image)
 		cv2.imwrite(cropped_path + '/cut_image_%s.jpg' % img_name, crop_src_image) 
+		
+		os.system("rm " + img_path)
 
 # 1.gray and threshold image
 def get_threshold_image(new_file, img_path):
@@ -153,11 +157,11 @@ def remove_interfere(crop_threshold_image):
 def get_dilate_image(new_file, crop_threshold_image, middle_point_sum):
 	print 'step 5.get dilate image'
 	#cv2.imwrite(new_file + '/5.1-crop_threshold_image.jpg', crop_threshold_image)
-	dilate_kernel = cv2.getStructuringElement(cv2.MORPH_RECT,(1, 500))
+	dilate_kernel = cv2.getStructuringElement(cv2.MORPH_RECT,(1, 100))
 	dilate_image = cv2.dilate(crop_threshold_image, dilate_kernel)
-	for i in middle_point_sum:
-		dilate_image[:,i-5:i+5] = 0
-	#cv2.imwrite(new_file + '/5.2-dilate.jpg', dilate_image)
+	#for i in middle_point_sum:
+	#	dilate_image[:,i-5:i+5] = 0
+	cv2.imwrite('./dilate.jpg', dilate_image)
 	return dilate_image
 
 # 6.get retangle
@@ -165,10 +169,12 @@ def get_retangle_contours(img_name, new_file, crop_src_image, dilate_image):
 	print 'step 6.get retangle'
 	contours, hierarchy = cv2.findContours(dilate_image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 	i = 1
+	print("contours' num:%d" %len(contours))
 	for count in contours:
 		x, y, w, h = cv2.boundingRect(count)
-		if h > 500 and w > 100:
+		if h > 50 and w > 10:
 			roi = crop_src_image[y:y+h, x:x+w]
+			roi = 255-roi
 			cv2.imwrite(new_file + '/%s_%02d.jpg' % (img_name, i), roi)
 			cv2.rectangle(crop_src_image,(x,y),(x+w,y+h),(255,0,0),5)
 			i = i + 1

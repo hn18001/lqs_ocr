@@ -38,7 +38,7 @@ def get_row_lection(src_path):
 		dilate_image = get_dilate_image(new_file, threshold_image, middle_point_sum)
 		# step 6
 		print("point2")
-		crop_src_image = get_retangle_contours(img_name, new_file, threshold_image, dilate_image)
+		crop_src_image = get_retangle_contours(img_name, new_file, src_image, dilate_image)
 		cv2.imwrite(cropped_path + '/cut_image_%s.jpg' % img_name, crop_src_image) 
 		
 		os.system("rm " + img_path)
@@ -52,7 +52,8 @@ def get_threshold_image(new_file, img_path):
 	gray_image = cv2.cvtColor(src_image, cv2.COLOR_RGB2GRAY)
 	blur_image = cv2.blur(gray_image, (5,5))
 	ret, threshold_image = cv2.threshold(blur_image, 0, 255, cv2.THRESH_BINARY_INV | cv2.THRESH_OTSU)
-	return src_image, threshold_image
+	cv2.imwrite("./bin.jpg", threshold_image)
+	return gray_image, threshold_image
 
 # 2.remove noise pixel
 def denoise(new_file, threshold_image):
@@ -174,7 +175,7 @@ def get_retangle_contours(img_name, new_file, crop_src_image, dilate_image):
 		x, y, w, h = cv2.boundingRect(count)
 		if h > 50 and w > 10:
 			roi = crop_src_image[y:y+h, x:x+w]
-			roi = 255-roi
+			#roi = 255-roi
 			cv2.imwrite(new_file + '/%s_%02d.jpg' % (img_name, i), roi)
 			cv2.rectangle(crop_src_image,(x,y),(x+w,y+h),(255,0,0),5)
 			i = i + 1

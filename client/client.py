@@ -71,6 +71,7 @@ def main():
             img_list = save_img(images)
 
             ocr_results = []
+            img_list.sort()
             for img in img_list:
                 ocr_rlt = ocr.ocr(img["full_path"])
                 print ocr_rlt
@@ -78,7 +79,8 @@ def main():
                 rlt = ocr_result(img_name = img["img_name"], result = ocr_rlt)
                 ocr_results.append(rlt)
 
-            result_client.write_ocr_result(ocr_results)
+            if len(img_list) != 0:
+                result_client.write_ocr_result(ocr_results)
 
             transport.close()
             print("ocr's time:%f" %(time.time()-start))

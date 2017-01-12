@@ -47,6 +47,8 @@ class Handler:
 		#src_path = results[0].img_name[:results[0].img_name.rfind('/')]
 		get_line_complex_lection.get_row_lection(img_path)
         ocr_imgs = []
+
+
         for root, dir_names, file_names in os.walk(img_path):
             for file_name in file_names:
                 full_path = os.path.join(root, file_name)
@@ -56,6 +58,7 @@ class Handler:
                 rlt_img = ocr_img(img = img, img_name = full_path, b_location = False)
                 ocr_imgs.append(rlt_img)
                 f.close()
+                
 	return ocr_imgs
 
 class Handler1:
@@ -63,10 +66,13 @@ class Handler1:
         self.log = {}
 
     def write_ocr_result(self, results):
+        f = open("/home/dzj_user/result.txt", 'w')
 	for result in results:
 		img_file_name = result.img_name[result.img_name.rfind('/')+1:]
 		print img_file_name, result.result
-		
+
+                f.write(img_file_name + "\t" + result.result + "\n")
+
 		new_file_txt = new_path + '/%s.txt' % img_file_name;
 		new_img_path = new_path + '/%s' % img_file_name;
 		with open(new_file_txt, 'wb') as nfp:
@@ -74,6 +80,7 @@ class Handler1:
 			nfp.write(line);
 		shutil.move(result.img_name, new_img_path)
 		
+        f.close()
 	return True
 
 def main():

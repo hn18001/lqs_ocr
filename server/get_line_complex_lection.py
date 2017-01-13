@@ -9,6 +9,33 @@ import cv2
 import os
 import numpy as np  
 
+def get_row_lection1(src_path):
+	img_list = []
+	base_path = "../processed_images/"
+	cropped_path = "../crop_images"
+	if not os.path.exists(cropped_path):
+		os.mkdir(cropped_path)
+	for root, dir, files in os.walk(src_path):
+		for img_name in files:
+			filename = root+"/" + img_name
+			img_list.append(filename)
+	for img_path in img_list:
+		img_name = img_path[img_path.rfind("/")+1:-4]
+		new_file = base_path + img_name
+		if not os.path.exists(new_file):
+			os.mkdir(new_file)
+
+		src_img, threshold_image = get_threshold_image(new_file, img_path)
+		#threshold_image = denoise(new_file, threshold_image)
+		print point1
+		crop_src_image, crop_threshold_image = get_lection_position(src_image, threshold_image)
+		print point2
+		middle_point_sum = remove_interface(crop_threshold_image)
+		print point3
+		dilate_image = get_dilate_image(new_file, crop_threshold_image, middle_point_sum)
+		crop_src_image = get_retangle_contours(img_name, new_file, crop_src_image, dilate_image)
+		cv2.imwrite(cropped_path + "/cut_image_%s.jpg" % img_name, crop_src_image)
+
 def get_row_lection(src_path):
 	img_list = []
 	base_path = '../need_to_process_images/'
@@ -53,7 +80,8 @@ def get_threshold_image(new_file, img_path):
 	blur_image = cv2.blur(gray_image, (5,5))
 	ret, threshold_image = cv2.threshold(blur_image, 0, 255, cv2.THRESH_BINARY_INV | cv2.THRESH_OTSU)
 	cv2.imwrite("./bin.jpg", threshold_image)
-	return src_image, threshold_image
+	print Point4
+	return gray_image, threshold_image
 
 # 2.remove noise pixel
 def denoise(new_file, threshold_image):

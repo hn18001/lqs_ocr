@@ -81,6 +81,7 @@ class Handler1:
 		shutil.move(result.img_name, new_img_path)
 		
         f.close()
+        print("OCR finished!")
 	return True
 
 def main():

@@ -53,7 +53,7 @@ def get_threshold_image(new_file, img_path):
 	blur_image = cv2.blur(gray_image, (5,5))
 	ret, threshold_image = cv2.threshold(blur_image, 0, 255, cv2.THRESH_BINARY_INV | cv2.THRESH_OTSU)
 	cv2.imwrite("./bin.jpg", threshold_image)
-	return gray_image, threshold_image
+	return src_image, threshold_image
 
 # 2.remove noise pixel
 def denoise(new_file, threshold_image):
@@ -173,14 +173,15 @@ def get_retangle_contours(img_name, new_file, crop_src_image, dilate_image):
 	print("contours' num:%d" %len(contours))
 	for count in contours:
 		x, y, w, h = cv2.boundingRect(count)
+                print x,y,w,h
 		if h > 50 and w > 10:
 			roi = crop_src_image[y:y+h, x:x+w]
 			#roi = 255-roi
 			cv2.imwrite(new_file + '/%s_%02d.jpg' % (img_name, i), roi)
-			cv2.rectangle(crop_src_image,(x,y),(x+w,y+h),(255,0,0),5)
 			i = i + 1
+			cv2.rectangle(crop_src_image,(x,y),(x+w,y+h),(0,0,255),2)
 	print 'len(contours): %d, len(cut): %d\n' % (len(contours),i)
-	#cv2.imwrite(new_file + '/cut_image.jpg', crop_src_image)
+	cv2.imwrite("/home/dzj_user/page_seg.jpg", crop_src_image)
 	return crop_src_image
 	
 def main(src_path):

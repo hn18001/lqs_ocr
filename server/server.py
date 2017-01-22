@@ -72,7 +72,8 @@ class Handler1:
 		img_file_name = result.img_name[result.img_name.rfind('/')+1:]
 		print result.result
 
-                f.write(result.result + "\n")
+		if len(result.result) != 0:
+                	f.write(result.result + "\n")
 
 		new_file_txt = new_path + '/%s.txt' % img_file_name;
 		new_img_path = new_path + '/%s' % img_file_name;

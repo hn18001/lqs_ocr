@@ -1,6 +1,8 @@
 import os
 import sys
 import shutil
+import get_line_complex_lection
+import cv2
 
 sys.path.append("./gen-py")
 from lqs_ocr import ocr_server
@@ -36,30 +38,43 @@ class Handler:
         self.log = {}
 
     def line_ocr(self):
-        print("Entering line_ocr()")
-        img_path = "../need_to_process_images/"
+        img_path = "../need_to_process_images/"      # The images that are needed to ocr are saved in the dir.
+        if not os.path.exists(img_path):
+            print("The path [%s] is not exist!" %img_path)
+            return []
+    	flag = True
+	if flag == True:
+		#src_path = results[0].img_name[:results[0].img_name.rfind('/')]
+		get_line_complex_lection.get_row_lection(img_path)
         ocr_imgs = []
+
+
         for root, dir_names, file_names in os.walk(img_path):
+            if len(file_names) != 0:
+                print("start ocr...\n")
             for file_name in file_names:
                 full_path = os.path.join(root, file_name)
-                #print full_path
                 f = open(full_path, 'r')
                 img = f.read()
                 rlt_img = ocr_img(img = img, img_name = full_path, b_location = False)
                 ocr_imgs.append(rlt_img)
                 f.close()
-        return ocr_imgs
+                
+	return ocr_imgs
 
 class Handler1:
     def __init__(self):
         self.log = {}
 
     def write_ocr_result(self, results):
-        print "In write_ocr_result()"
+        f = open("/home/dzj_user/result.txt", 'w')
 	for result in results:
 		img_file_name = result.img_name[result.img_name.rfind('/')+1:]
-		print img_file_name, result.result
-		
+		print result.result
+
+		if len(result.result) != 0:
+                	f.write(result.result + "\n")
+
 		new_file_txt = new_path + '/%s.txt' % img_file_name;
 		new_img_path = new_path + '/%s' % img_file_name;
 		with open(new_file_txt, 'wb') as nfp:
@@ -67,7 +82,8 @@ class Handler1:
 			nfp.write(line);
 		shutil.move(result.img_name, new_img_path)
 		
-		
+        f.close()
+        print("\nocr is finished...")
 	return True
 
 def main():
@@ -96,7 +112,7 @@ def main():
 	server.serve()
 
 if __name__ == "__main__":
-	new_path = '../processed_images'
+	new_path = '../processed_images'        # Save the ocr result and copy the images to this dir.
 	if not os.path.exists(new_path):
 		os.mkdir(new_path)
 	

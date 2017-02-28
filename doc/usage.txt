@@ -1,0 +1,10 @@
+一、经文OCR识别使用说明
+1、进入server文件夹，使用python ./server.py运行脚本；
+2、在server的同级目录新建need_to_process_images文件夹，将需要识别的文件放入此文件夹中；
+3、OCR服务器上的client端会每隔1秒钟进行轮询，调用server端的line_ocr接口，如果need_to_process_images文件夹中有图像文件，会把这些文件发送给client端；
+4、client端接收到图像后，会进行OCR识别，并调用server端的write_ocr_result接口，将识别结果放入processed_images中。
+
+二、注意事项：
+1、OCR的输入应该是切割好的经文列二值化图像；
+2、现在不支持多列同时识别；
+3、test文件夹中提供了一些测试图像，以供参考。

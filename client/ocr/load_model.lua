@@ -43,7 +43,7 @@ end
 start = os.clock()
 arg = {}
 arg[1] = 1 
-arg[2] = "snapshot_42000.t7"
+arg[2] = "snapshot_8000.t7"
 local dev_id = tonumber(arg[1])
 local wordlisturi = ocr_project_path..'/src/words_lqs.txt'
 id2char_tb = {}
